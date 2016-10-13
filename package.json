@@ -1,0 +1,17 @@
+{
+  "name": "you-know-what-they-say",
+  "version": "1.0.0",
+  "description": "You Know What They Say! Twitter bot by Eric Bichan",
+  "main": "main.js",
+  "dependencies": {
+    "rita": "^1.1.40",
+    "twit": "^2.2.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eric Bichan",
+  "license": "ISC"
+}
