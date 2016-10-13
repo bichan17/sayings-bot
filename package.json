@@ -1,5 +1,5 @@
 {
-  "name": "Sayings bot",
+  "name": "sayings-bot",
   "version": "1.0.0",
   "description": "Goofy twitter bot by Eric Bichan <eric.bichan@gmail.com>",
   "main": "main.js",

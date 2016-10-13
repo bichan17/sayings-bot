@@ -33,7 +33,7 @@ function generateTweet(){
 
 	console.log("generated output: " + output);
 		
-	// T.post('statuses/update', tweet, tweeted);
+	T.post('statuses/update', tweet, tweeted);
 
 }
 
