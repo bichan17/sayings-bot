@@ -13,8 +13,8 @@ generateTweet();
 function generateTweet(){
 	var NUM_PHRASES = 3;
 
-	// var randNum = Math.floor(Math.random() * NUM_PHRASES) + 1;
-	var randNum = 1;
+	var randNum = Math.floor(Math.random() * NUM_PHRASES) + 1;
+	// var randNum = 1;
 	console.log(randNum);
 
 	switch(randNum) {
@@ -34,7 +34,7 @@ function generateTweet(){
 
 	console.log("generated output: " + output);
 		
-	// T.post('statuses/update', tweet, tweeted);
+	T.post('statuses/update', tweet, tweeted);
 
 }
 
