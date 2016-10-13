@@ -13,7 +13,8 @@ generateTweet();
 function generateTweet(){
 	var NUM_PHRASES = 3;
 
-	var randNum = Math.floor(Math.random() * NUM_PHRASES) + 1;
+	// var randNum = Math.floor(Math.random() * NUM_PHRASES) + 1;
+	var randNum = 1;
 	console.log(randNum);
 
 	switch(randNum) {
@@ -33,7 +34,7 @@ function generateTweet(){
 
 	console.log("generated output: " + output);
 		
-	T.post('statuses/update', tweet, tweeted);
+	// T.post('statuses/update', tweet, tweeted);
 
 }
 
@@ -67,12 +68,14 @@ function dontDoThe(){
 	var verb2 = getRhymingByPOS(verb1, 'vb');
 	var noun2 = getRhymingByPOS(noun1, 'nn');
 
-	while(verb2 === false || noun2 === false){
+	while(verb2 === false){
 		//invalid rhyme, try again
 		verb1 = lexicon.randomWord('vb');
-		noun1 = lexicon.randomWord('nn');
-
 		verb2 = getRhymingByPOS(verb1, 'vb');
+	}
+	while(noun2 === false){
+		//invalid rhyme, try again
+		noun1 = lexicon.randomWord('nn');
 		noun2 = getRhymingByPOS(noun1, 'nn');
 	}
 
@@ -111,25 +114,26 @@ function getRhymingByPOS(word, pos){
 			if (pos == 'vb') {
 				if (lexicon.isVerb(allRhymes[i])) {
 					cleanedWords.push(allRhymes[i]);
-				}else{
-					console.log('could not find rhyme for: ' + word + ' as ' + pos);
-					return false;
 				}
 			}else{
 				if (lexicon.isNoun(allRhymes[i])) {
 					cleanedWords.push(allRhymes[i]);
-				}else{
-					console.log('could not find rhyme for: ' + word + ' as ' + pos);
-					return false;
 				}
 			}
 		}
-		//pick word randomly from cleaned results
-		var matchedRhyme = cleanedWords[Math.floor(Math.random() * cleanedWords.length)];
-		console.log('rhymed: ' + word + ' with ' + matchedRhyme);
-		return matchedRhyme;
+		if (cleanedWords.length == 0) {
+			//no rhyming words with same part of speech
+			console.log('could not find rhyme for: ' + word + ' as ' + pos);
+			return false;
+		}else{
+			//pick word randomly from cleaned results
+			var matchedRhyme = cleanedWords[Math.floor(Math.random() * cleanedWords.length)];
+			console.log('rhymed: ' + word + ' with ' + matchedRhyme);
+			return matchedRhyme;
+		}
 	}else{
-		console.log('could not find rhyme for: ' + word + ' as ' + pos);
+		//no rhyming words at all
+		console.log('could not find any rhymes for: ' + word);
 		return false;
 	}
 }
