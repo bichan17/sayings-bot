@@ -1,7 +1,7 @@
 {
-  "name": "you-know-what-they-say",
+  "name": "Sayings bot",
   "version": "1.0.0",
-  "description": "You Know What They Say! Twitter bot by Eric Bichan",
+  "description": "Goofy twitter bot by Eric Bichan <eric.bichan@gmail.com>",
   "main": "main.js",
   "dependencies": {
     "rita": "^1.1.40",
