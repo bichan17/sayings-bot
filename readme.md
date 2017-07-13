@@ -30,4 +30,3 @@ run with `npm start`
 
 ##todo
 deny rhyming words that are in each other ie: "funding" & "refunding"
-favor rhyming words that have the same number of sylibles
