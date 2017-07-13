@@ -1,2 +1,4 @@
 config.js
+sftp-config.json
+sftp-config-o.json
 node_modules/
