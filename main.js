@@ -1,32 +1,34 @@
-var Twit = require('twit');
-var config = require('./config');
-var rita = require('rita');
+let Twit = require('twit');
+let config = require('./config');
+let rita = require('rita');
 
-var T = new Twit(config);
-var lexicon = new rita.RiLexicon;
+let T = new Twit(config);
+let lexicon = new rita.RiLexicon;
 
+const NUM_PHRASES = 4;
+const NUM_SYLLABLES = 3;
 console.log('----bot starting----');
 
 
 generateTweet();
 
 function generateTweet(){
-	var NUM_PHRASES = 3;
-	var output = '';
+	let output = '';
 
-	var num = Math.random();
-	var randNum = Math.floor(num * NUM_PHRASES) + 1;
+	let num = Math.random();
+	let randNum = Math.floor(num * NUM_PHRASES) + 1;
 
-	var nounSyllableCount = Math.floor(Math.random() * 3) + 1;
-	var verbSyllableCount = Math.floor(Math.random() * 3) + 1;
+	let nounSyllableCount = Math.floor(Math.random() * NUM_SYLLABLES) + 1;
+	let verbSyllableCount = Math.floor(Math.random() * NUM_SYLLABLES) + 1;
 
 	console.log('noun count: ' + nounSyllableCount);
 	console.log('verb count: ' + verbSyllableCount);
 
 
-
-
 	switch(randNum) {
+    case 4:
+      output = friendIndeed(nounSyllableCount);
+      break;
     case 3:
       output = skillsToPayTheBills(nounSyllableCount,verbSyllableCount);
       break;
@@ -37,7 +39,7 @@ function generateTweet(){
 			output = dontDoThe(nounSyllableCount,verbSyllableCount);
 	}
 
-	var tweet = {
+	let tweet = {
 		status: output
 	}
 
@@ -49,10 +51,10 @@ function generateTweet(){
 
 function skillsToPayTheBills(nounSyllableCount,verbSyllableCount){
 	console.log('tweet format: skillsToPayTheBills');
-	var noun1 = lexicon.randomWord('nn',nounSyllableCount);
-	var verb1 = lexicon.randomWord('vb',verbSyllableCount);
+	let noun1 = lexicon.randomWord('nn',nounSyllableCount);
+	let verb1 = lexicon.randomWord('vb',verbSyllableCount);
 
-	var noun2 = getFilteredRhyme(noun1, 'nn',nounSyllableCount);
+	let noun2 = getFilteredRhyme(noun1, 'nn',nounSyllableCount);
 
 	while(noun2 === false){
 		//invalid rhyme, try again with new words + reduced syllables
@@ -63,7 +65,7 @@ function skillsToPayTheBills(nounSyllableCount,verbSyllableCount){
 
 	noun1 = rita.RiTa.pluralize(noun1);
 	noun2 = rita.RiTa.pluralize(noun2);
-	var output = 'you gotta have ' + noun1 + ' to ' + verb1 + ' the ' + noun2;
+	let output = 'you gotta have ' + noun1 + ' to ' + verb1 + ' the ' + noun2;
 
 	// console.log(output);
 
@@ -74,11 +76,11 @@ function skillsToPayTheBills(nounSyllableCount,verbSyllableCount){
 function dontDoThe(nounSyllableCount,verbSyllableCount){
 	console.log('tweet format: dontDoThe');
 
-	var verb1 = lexicon.randomWord('vb',verbSyllableCount);
-	var noun1 = lexicon.randomWord('nn',nounSyllableCount);
+	let verb1 = lexicon.randomWord('vb',verbSyllableCount);
+	let noun1 = lexicon.randomWord('nn',nounSyllableCount);
 
-	var verb2 = getFilteredRhyme(verb1, 'vb',verbSyllableCount);
-	var noun2 = getFilteredRhyme(noun1, 'nn',nounSyllableCount);
+	let verb2 = getFilteredRhyme(verb1, 'vb',verbSyllableCount);
+	let noun2 = getFilteredRhyme(noun1, 'nn',nounSyllableCount);
 
 	while(verb2 === false){
 		//invalid rhyme, try again with new words + reduced syllables
@@ -93,7 +95,7 @@ function dontDoThe(nounSyllableCount,verbSyllableCount){
 		noun2 = getFilteredRhyme(noun1, 'nn',nounSyllableCount);
 	}
 
-	var output = 'dont ' + verb1 + ' the ' + noun1 + ' if you cant ' + verb2 + ' the ' + noun2;
+	let output = 'dont ' + verb1 + ' the ' + noun1 + ' if you cant ' + verb2 + ' the ' + noun2;
 
 	// console.log(output);
 
@@ -103,8 +105,8 @@ function dontDoThe(nounSyllableCount,verbSyllableCount){
 
 function noMoneyNoHoney(nounSyllableCount){
 	console.log('tweet format: noMoneyNoHoney');
-	var noun1 = lexicon.randomWord('nn',nounSyllableCount);
-	var noun2 = getFilteredRhyme(noun1, 'nn',nounSyllableCount);
+	let noun1 = lexicon.randomWord('nn',nounSyllableCount);
+	let noun2 = getFilteredRhyme(noun1, 'nn',nounSyllableCount);
 
 	while(noun2 === false){
 		//invalid rhyme, try again with new words + reduced syllables
@@ -113,33 +115,78 @@ function noMoneyNoHoney(nounSyllableCount){
 		noun2 = getFilteredRhyme(noun1, 'nn',nounSyllableCount);
 	}
 
-	var output = 'no ' + noun1 + ', no ' + noun2;
+	let output = 'no ' + noun1 + ', no ' + noun2;
 
 	return output;
 
 }
 
+function friendIndeed(nounSyllableCount){
+	//A friend with weed is a friend indeed.
+	console.log('tweet format: friendIndeed');
+	let noun1 = lexicon.randomWord('nn',nounSyllableCount);
+
+	let noun2 = getFilteredRhyme('indeed', 'nn');
+
+	let article = getNounArticle(noun1);
+
+
+	let output = article + ' ' + noun1 + ' with ' + noun2 + ' is ' + article + ' ' + noun1 + ' indeed';
+
+	return output;
+
+}
+
+function getNounArticle(noun){
+
+	let vowels = ['a','e','i','o','u'];
+
+	let article = 'a';
+
+	noun = new rita.RiString(noun); 
+
+	for (let i = 0; i < vowels.length; i++) {
+		if (noun.startsWith(vowels[i])) {
+			article = 'an';
+		}
+	}
+
+	return article;
+}
+
+//syllable count optional
 function getFilteredRhyme(word, pos, syllableCount){
 	console.log('getFilteredRhyme: ' + word);
 
-	var allRhymes = lexicon.rhymes(word);
-	var cleanedWords = [];
+	let allRhymes = lexicon.rhymes(word);
+	let cleanedWords = [];
 
 
 	if (allRhymes.length != 0) {
-		for (var i = 0; i < allRhymes.length; i++) {
-			var string = allRhymes[i];
-			var rs = new rita.RiString(string);
-
+		for (let i = 0; i < allRhymes.length; i++) {
+			let string = allRhymes[i];
+			let rs = new rita.RiString(string);
 			rs.analyze();
 
-			var stringFeatures = rs.features();
+			let stringFeatures = rs.features();
+			let syllables = stringFeatures.syllables.split('/');
+			let stringPos = stringFeatures.pos;
 
-			var syllables = stringFeatures.syllables.split('/');
+			if(stringPos === 'vbn' && pos === 'nn'){
+				stringPos = 'nn';
+			}
+			if(stringPos === 'vbn' && pos === 'vb'){
+				stringPos = 'vb';
+			}
 
-
-			if (pos == stringFeatures.pos && syllables.length == syllableCount) {
-				cleanedWords.push(string);
+			if (typeof syllableCount !== 'undefined') {
+				if (pos == stringPos && syllables.length == syllableCount) {
+					cleanedWords.push(string);
+				}
+			}else{
+				if (pos == stringPos) {
+					cleanedWords.push(string);
+				}
 			}
 		}
 		if (cleanedWords.length == 0) {
@@ -148,7 +195,7 @@ function getFilteredRhyme(word, pos, syllableCount){
 			return false;
 		}else{
 			//pick word randomly from cleaned results
-			var matchedRhyme = cleanedWords[Math.floor(Math.random() * cleanedWords.length)];
+			let matchedRhyme = cleanedWords[Math.floor(Math.random() * cleanedWords.length)];
 			console.log('rhymed: ' + word + ' with ' + matchedRhyme);
 			return matchedRhyme;
 		}
@@ -162,7 +209,7 @@ function getFilteredRhyme(word, pos, syllableCount){
 function reduceSyllableCount(count){
 	count--;
 	if (count === 0) {
-		count = 3;
+		count = NUM_SYLLABLES;
 	}
 	console.log('new syllableCount: ' + count);
 	return count;
