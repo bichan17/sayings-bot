@@ -5,7 +5,7 @@ let rita = require('rita');
 let T = new Twit(config);
 let lexicon = new rita.RiLexicon;
 
-const NUM_PHRASES = 4;
+const NUM_PHRASES = 7;
 const NUM_SYLLABLES = 3;
 console.log('----bot starting----');
 
@@ -25,7 +25,17 @@ function generateTweet(){
 	console.log('verb count: ' + verbSyllableCount);
 
 
+
 	switch(randNum) {
+    case 7:
+      output = doesntGetLovin(nounSyllableCount);
+      break;
+    case 6:
+      output = wearItDontTearIt(verbSyllableCount);
+      break;
+    case 5:
+      output = fakeItTillYouMakeIt(verbSyllableCount);
+      break;
     case 4:
       output = friendIndeed(nounSyllableCount);
       break;
@@ -132,6 +142,63 @@ function friendIndeed(nounSyllableCount){
 
 
 	let output = article + ' ' + noun1 + ' with ' + noun2 + ' is ' + article + ' ' + noun1 + ' indeed';
+
+	return output;
+
+}
+
+
+function fakeItTillYouMakeIt(verbSyllableCount){
+	//Fake it Til you make it
+	console.log('tweet format: fakeItTillYouMakeIt');
+	let verb1 = lexicon.randomWord('vb',verbSyllableCount);
+	let verb2 = getFilteredRhyme(verb1, 'vb',verbSyllableCount);
+
+	while(verb2 === false){
+		//invalid rhyme, try again with new words + reduced syllables
+		verbSyllableCount = reduceSyllableCount(verbSyllableCount);
+		verb1 = lexicon.randomWord('vb',verbSyllableCount);
+		verb2 = getFilteredRhyme(verb1, 'vb',verbSyllableCount);
+	}
+
+	let output = verb1 + ' it til you ' + verb2 + ' it';
+
+	return output;
+
+}
+
+function wearItDontTearIt(verbSyllableCount){
+	console.log('tweet format: wearItDontTearIt');
+	let verb1 = lexicon.randomWord('vb',verbSyllableCount);
+	let verb2 = getFilteredRhyme(verb1, 'vb',verbSyllableCount);
+
+	while(verb2 === false){
+		//invalid rhyme, try again with new words + reduced syllables
+		verbSyllableCount = reduceSyllableCount(verbSyllableCount);
+		verb1 = lexicon.randomWord('vb',verbSyllableCount);
+		verb2 = getFilteredRhyme(verb1, 'vb',verbSyllableCount);
+	}
+
+	let output = verb1 + ' it, dont ' + verb2 + ' it';
+
+	return output;
+
+}
+
+function doesntGetLovin(nounSyllableCount){
+	//If it doesn't get 'lovin, it's not going in the oven.
+	console.log('tweet format: doesntGetLoving');
+	let noun1 = lexicon.randomWord('nn',nounSyllableCount);
+	let noun2 = getFilteredRhyme(noun1, 'nn',nounSyllableCount);
+
+	while(noun2 === false){
+		//invalid rhyme, try again with new words + reduced syllables
+		nounSyllableCount = reduceSyllableCount(nounSyllableCount);
+		noun1 = lexicon.randomWord('nn',nounSyllableCount);
+		noun2 = getFilteredRhyme(noun1, 'nn',nounSyllableCount);
+	}
+
+	let output = 'if it doesnt have '+ getNounArticle(noun1) + ' ' + noun1 + ', its not going in the ' + noun2;
 
 	return output;
 
